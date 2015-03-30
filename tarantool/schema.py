@@ -12,7 +12,8 @@ import tarantool.const as const
 class SchemaIndex(object):
     def __init__(self, array, space):
         self.iid = array[1]
-        self.name = array[2]
+        # very important fix
+        self.name = array[2].decode()
         self.index = array[3]
         self.unique = array[4]
         self.parts = []
