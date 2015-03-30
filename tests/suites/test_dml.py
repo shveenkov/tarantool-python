@@ -32,7 +32,7 @@ class Request(unittest.TestCase):
 
     def test_00_02_fill_space(self):
         # Fill space with values
-        for i in xrange(1, 500):
+        for i in range(1, 500):
             self.assertEqual(
                     self.con.insert('space_1', [i, i%5, 'tuple_'+str(i)])[0],
                     [i, i%5, 'tuple_'+str(i)]
@@ -145,7 +145,7 @@ class Request(unittest.TestCase):
         ans = self.con.call('fiber.time64')
         self.assertEqual(len(ans), 1)
         self.assertEqual(len(ans[0]), 1)
-        self.assertIsInstance(ans[0][0], (int, long))
+        self.assertIsInstance(ans[0][0], int)
         ans = self.con.call('uuid.str')
         self.assertEqual(len(ans), 1)
         self.assertEqual(len(ans[0]), 1)

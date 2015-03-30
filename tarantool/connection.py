@@ -154,12 +154,13 @@ class Connection(object):
             raise NetworkError(e)
 
     def _recv(self, to_read):
-        buf = ''
+        buf = b""
         while to_read > 0:
             tmp = self._socket.recv(to_read)
             if not tmp:
                 raise NetworkError(socket.error(errno.ECONNRESET,
                                    "Lost connection to server during query"))
+
             to_read -= len(tmp)
             buf += tmp
         return buf
@@ -186,7 +187,7 @@ class Connection(object):
 
         # Repeat request in a loop if the server returns completion_status == 1
         # (try again)
-        for attempt in xrange(RETRY_MAX_ATTEMPTS):    # pylint: disable=W0612
+        for attempt in range(RETRY_MAX_ATTEMPTS):    # pylint: disable=W0612
             self._socket.sendall(bytes(request))
             response = Response(self, self._read_response())
 
@@ -319,7 +320,7 @@ class Connection(object):
 
         :rtype: `Response` instance
         '''
-        if isinstance(space_name, basestring):
+        if isinstance(space_name, str):
             space_name = self.schema.get_space(space_name).sid
         request = RequestReplace(self, space_name, values)
         return self._send_request(request)
@@ -368,7 +369,7 @@ class Connection(object):
 
         :rtype: `Response` instance
         '''
-        if isinstance(space_name, basestring):
+        if isinstance(space_name, str):
             space_name = self.schema.get_space(space_name).sid
         request = RequestInsert(self, space_name, values)
         return self._send_request(request)
@@ -388,9 +389,9 @@ class Connection(object):
         index_name = kwargs.get("index", 0)
 
         key = check_key(key)
-        if isinstance(space_name, basestring):
+        if isinstance(space_name, str):
             space_name = self.schema.get_space(space_name).sid
-        if isinstance(index_name, basestring):
+        if isinstance(index_name, str):
             index_name = self.schema.get_index(space_name, index_name).iid
         request = RequestDelete(self, space_name, index_name, key)
         return self._send_request(request)
@@ -418,9 +419,9 @@ class Connection(object):
         index_name = kwargs.get("index", 0)
 
         key = check_key(key)
-        if isinstance(space_name, basestring):
+        if isinstance(space_name, str):
             space_name = self.schema.get_space(space_name).sid
-        if isinstance(index_name, basestring):
+        if isinstance(index_name, str):
             index_name = self.schema.get_index(space_name, index_name).iid
         request = RequestUpdate(self, space_name, index_name, key, op_list)
         return self._send_request(request)
@@ -494,9 +495,9 @@ class Connection(object):
         # tuples)
         key = check_key(key, select=True)
 
-        if isinstance(space_name, basestring):
+        if isinstance(space_name, str):
             space_name = self.schema.get_space(space_name).sid
-        if isinstance(index_name, basestring):
+        if isinstance(index_name, str):
             index_name = self.schema.get_index(space_name, index_name).iid
         request = RequestSelect(self, space_name, index_name, key, offset,
                                 limit, iterator_type)
